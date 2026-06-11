@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FitCoach AI">
+<meta name="theme-color" content="#07070c">
+<title>FitCoach AI</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj48cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgcng9IjI4IiBmaWxsPSIjMDcwNzBjIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYzZmZjRkIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTNlNmMwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHJ4PSIxOCIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjYwIiB5PSI3NCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjM0IiBmaWxsPSIjMDcwNzBjIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GQzwvdGV4dD48L3N2Zz4=">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070c; --bg2:#0c0c14;
+  --card:#12121c; --card2:#161622;
+  --line:#23233a; --line2:#2e2e48;
+  --txt:#eceadf; --txt2:#9b9bae; --txt3:#5b5b70;
+  --lime:#c6ff4d; --teal:#53e6c0; --gold:#ffc857; --red:#ff6b6b; --violet:#b48aff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--txt);overscroll-behavior:none}
+body{display:flex;justify-content:center}
+#app{width:100%;max-width:430px;min-height:100vh;display:flex;flex-direction:column;position:relative;background:
+  radial-gradient(ellipse 80% 40% at 70% -10%, rgba(198,255,77,0.07), transparent),
+  radial-gradient(ellipse 60% 30% at 20% 110%, rgba(83,230,192,0.05), transparent)}
+input,button,select,textarea{font-family:'DM Sans',sans-serif}
+input::placeholder,textarea::placeholder{color:#454560}
+input:focus,textarea:focus{outline:none;border-color:var(--lime)!important}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.fade{animation:fadeIn 0.35s cubic-bezier(.2,.8,.3,1)}
+.spinner{width:30px;height:30px;border:3px solid var(--line);border-top:3px solid var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;margin:24px auto;display:block}
+
+/* ── Header ─────────────────────────────── */
+#header{padding:54px 20px 4px}
+.logo-row{display:flex;align-items:center;gap:11px}
+.logo-box{width:40px;height:40px;background:linear-gradient(135deg,var(--lime),var(--teal));border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;color:var(--bg);flex-shrink:0;box-shadow:0 4px 20px rgba(198,255,77,0.25)}
+.app-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px;letter-spacing:-0.5px;color:#fff}
+.tagline{font-size:11px;color:var(--txt3);margin-top:2px;margin-bottom:18px;padding-left:51px}
+
+/* ── Nav ────────────────────────────────── */
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(9,9,15,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);display:flex;padding:10px 8px max(14px,env(safe-area-inset-bottom));z-index:100}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 0;color:var(--txt3);transition:all 0.25s;font-size:10px;font-weight:600;border-radius:14px}
+.nav-btn.active{color:var(--lime)}
+.nav-btn.active .nav-ico{background:rgba(198,255,77,0.12);box-shadow:inset 0 0 0 1px rgba(198,255,77,0.25)}
+.nav-ico{font-size:19px;line-height:1;width:42px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:10px;transition:all 0.25s}
+
+/* ── Layout ─────────────────────────────── */
+#content{flex:1;padding:0 16px 110px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen{display:none}
+.screen.active{display:block;animation:fadeIn 0.25s ease}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#fff;margin:6px 0 3px;letter-spacing:-0.6px}
+.section-sub{font-size:13px;color:var(--txt3);margin-bottom:18px}
+
+/* ── Cards ──────────────────────────────── */
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.card-title{font-size:12px;font-weight:800;color:var(--txt2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+
+/* ── Form ───────────────────────────────── */
+.field-label{font-size:11px;color:var(--txt3);margin-bottom:6px;display:block;font-weight:700;letter-spacing:0.6px;text-transform:uppercase}
+.field-input{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;color:var(--txt);font-size:15px;transition:border-color 0.2s}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+/* ── Buttons ────────────────────────────── */
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--lime),#b2f23a);color:#0c0c10;border:none;border-radius:14px;padding:15px;font-weight:800;font-size:15px;cursor:pointer;letter-spacing:-0.2px;transition:transform 0.15s,box-shadow 0.2s;box-shadow:0 4px 18px rgba(198,255,77,0.18)}
+.btn-primary:disabled{opacity:0.35;box-shadow:none}
+.btn-primary:active{transform:scale(0.97)}
+.btn-ghost{background:transparent;border:1px solid var(--line2);border-radius:10px;color:var(--txt3);padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer}
+.btn-add{background:linear-gradient(135deg,var(--lime),#b2f23a);color:#0c0c10;border:none;border-radius:12px;padding:0 17px;font-weight:900;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 3px 12px rgba(198,255,77,0.2)}
+
+/* ── Pills & Tabs ───────────────────────── */
+.pill{background:var(--bg2);color:var(--txt3);border:1px solid var(--line2);border-radius:22px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.pill.active{background:var(--lime);color:#0c0c10;border-color:transparent;font-weight:800;box-shadow:0 3px 12px rgba(198,255,77,0.25)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.day-tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;background:var(--bg2);color:var(--txt3);border:1px solid var(--line2);border-radius:22px;padding:8px 17px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.day-tab.active{background:var(--lime);color:#0c0c10;border-color:transparent;box-shadow:0 3px 12px rgba(198,255,77,0.25)}
+
+/* ── Progress bars ──────────────────────── */
+.bar-wrap{height:10px;background:var(--bg2);border-radius:6px;overflow:hidden;margin:9px 0 7px;border:1px solid var(--line)}
+.bar-fill{height:100%;border-radius:6px;transition:width 0.6s cubic-bezier(.2,.8,.3,1),background 0.5s}
+
+/* ── Upload zones ───────────────────────── */
+.upload-zone{border:1.5px dashed var(--line2);border-radius:16px;padding:30px 16px;text-align:center;cursor:pointer;color:var(--txt3);font-size:13px;transition:border-color 0.2s;background:rgba(255,255,255,0.01)}
+.upload-zone:active{border-color:var(--lime)}
+
+/* ── Chat ───────────────────────────────── */
+.chat-box{max-height:340px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:9px}
+.chat-user{align-self:flex-end;background:linear-gradient(135deg,var(--lime),#b2f23a);color:#0c0c10;border-radius:16px 16px 4px 16px;padding:11px 15px;font-size:13px;font-weight:600;max-width:85%;line-height:1.45}
+.chat-ai{align-self:flex-start;background:var(--bg2);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:11px 15px;font-size:13px;color:#cfe8d8;max-width:90%;line-height:1.6;white-space:pre-wrap}
+.chat-typing{align-self:flex-start;background:var(--bg2);border-radius:16px 16px 16px 4px;padding:11px 15px;font-size:13px;color:var(--txt3);animation:pulse 1.2s infinite}
+.chat-input-row{display:flex;gap:9px;align-items:flex-end}
+.chat-textarea{flex:1;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:11px 13px;color:var(--txt);font-size:14px;resize:none;min-height:46px;max-height:110px;line-height:1.4}
+.chat-send{background:linear-gradient(135deg,var(--lime),#b2f23a);color:#0c0c10;border:none;border-radius:12px;padding:11px 15px;font-weight:900;font-size:18px;cursor:pointer;flex-shrink:0;height:46px}
+
+/* ── Metric cards ───────────────────────── */
+.metric-card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;padding:16px 12px;text-align:center}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;margin:0}
+.metric-lbl{font-size:10px;color:var(--txt3);font-weight:700;margin:0 0 5px;text-transform:uppercase;letter-spacing:0.6px}
+
+/* ── Suggestion cards ───────────────────── */
+.sugg-card{background:var(--bg2);border:1px solid rgba(83,230,192,0.25);border-radius:14px;padding:13px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sugg-name{font-size:14px;font-weight:800;color:var(--teal);margin-bottom:3px}
+.sugg-reason{font-size:12px;color:var(--txt2);line-height:1.5}
+.sugg-btn{background:rgba(83,230,192,0.1);color:var(--teal);border:1px solid rgba(83,230,192,0.4);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:all 0.2s}
+.sugg-btn.added{background:rgba(198,255,77,0.12);color:var(--lime);border-color:rgba(198,255,77,0.4)}
+
+/* ── API setup ──────────────────────────── */
+.api-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:85vh;padding:24px;text-align:center}
+.api-logo{width:76px;height:76px;background:linear-gradient(135deg,var(--lime),var(--teal));border-radius:22px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:33px;color:var(--bg);margin:0 auto 22px;box-shadow:0 8px 32px rgba(198,255,77,0.3)}
+.api-key-input{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:13px;padding:15px;color:var(--txt);font-size:14px;font-family:monospace;margin:13px 0}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- ══ API KEY SETUP ══ -->
+  <div id="api-setup" style="display:none">
+    <div class="api-screen">
+      <div class="api-logo">FC</div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:8px">FitCoach AI</h1>
+      <p style="color:var(--txt3);font-size:14px;margin-bottom:26px;line-height:1.6">Tu entrenador y nutricionista personal.<br>Para empezar, ingresá tu API key de Anthropic.</p>
+      <div style="width:100%;max-width:360px">
+        <label class="field-label">API Key de Anthropic</label>
+        <input type="password" id="api-key-input" class="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <p style="font-size:11px;color:var(--txt3);margin-bottom:18px">Conseguila en <strong style="color:var(--txt2)">console.anthropic.com</strong> → API Keys.<br>Se guarda solo en tu dispositivo.</p>
+        <button class="btn-primary" onclick="saveApiKey()">Empezar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN APP ══ -->
+  <div id="main-app" style="display:none">
+    <div id="header">
+      <div class="logo-row">
+        <div class="logo-box">FC</div>
+        <div>
+          <div class="app-name">FitCoach AI</div>
+        </div>
+      </div>
+      <p class="tagline">Tu entrenador y nutricionista · IA 24/7</p>
+    </div>
+
+    <div id="content">
+
+      <!-- ── HOME ── -->
+      <div id="screen-home" class="screen active">
+        <p class="section-title" id="home-greeting">Hola 👋</p>
+        <p class="section-sub">Tu camino hacia −30 kg en 6 meses</p>
+        <div id="home-metrics"></div>
+        <div class="card">
+          <p class="card-title">Cómo usar la app</p>
+          <div style="display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)">
+            <span style="font-size:22px">🏋️</span>
+            <div><p style="font-weight:700;font-size:14px">Entrenador</p><p style="font-size:12px;color:var(--txt3);margin-top:2px">Plan semanal con rutinas por día</p></div>
+          </div>
+          <div style="display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)">
+            <span style="font-size:22px">🥗</span>
+            <div><p style="font-weight:700;font-size:14px">Nutrición</p><p style="font-size:12px;color:var(--txt3);margin-top:2px">Calorías, proteína, fotos y plan de dieta</p></div>
+          </div>
+          <div style="display:flex;gap:13px;padding:11px 0">
+            <span style="font-size:22px">🛒</span>
+            <div><p style="font-weight:700;font-size:14px">Súper</p><p style="font-size:12px;color:var(--txt3);margin-top:2px">Analizá productos y gestioná tu lista</p></div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px">
+          <button onclick="clearApiKey()" class="btn-ghost">Cambiar API key</button>
+        </div>
+      </div>
+
+      <!-- ── TRAINER ── -->
+      <div id="screen-trainer" class="screen">
+        <p class="section-title">Entrenador</p>
+        <p class="section-sub">Tu plan personalizado con IA</p>
+        <div class="card">
+          <p class="card-title">Días de entrenamiento</p>
+          <div class="pills" id="day-pills">
+            <button class="pill" onclick="toggleDay('Lunes',this)">Lun</button>
+            <button class="pill" onclick="toggleDay('Martes',this)">Mar</button>
+            <button class="pill" onclick="toggleDay('Miércoles',this)">Mié</button>
+            <button class="pill" onclick="toggleDay('Jueves',this)">Jue</button>
+            <button class="pill" onclick="toggleDay('Viernes',this)">Vie</button>
+            <button class="pill" onclick="toggleDay('Sábado',this)">Sáb</button>
+            <button class="pill" onclick="toggleDay('Domingo',this)">Dom</button>
+          </div>
+          <button id="btn-gen-plan" class="btn-primary" onclick="generatePlan()" disabled>Generar plan de entrenamiento ↗</button>
+        </div>
+        <div id="trainer-result"></div>
+        <div id="trainer-chat-wrap" style="display:none">
+          <div class="card">
+            <p class="card-title">💬 Consultá a tu entrenador</p>
+            <div id="trainer-chat-messages" class="chat-box"></div>
+            <div class="chat-input-row">
+              <textarea id="trainer-chat-input" class="chat-textarea" placeholder="Ej: ¿Puedo reemplazar las sentadillas? ¿Qué hago si me duele la rodilla?..."></textarea>
+              <button onclick="sendTrainerChat()" class="chat-send">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NUTRITION ── -->
+      <div id="screen-nutrition" class="screen">
+        <p class="section-title">Nutrición</p>
+        <p class="section-sub">Controlá tus calorías y proteína del día</p>
+
+        <!-- Calorie bar -->
+        <div class="card" style="padding-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+            <span style="font-weight:800;font-size:15px">🔥 Calorías hoy</span>
+            <span style="font-size:12px;color:var(--txt3)" id="cal-text">0 / — kcal</span>
+          </div>
+          <div class="bar-wrap"><div class="bar-fill" id="cal-bar" style="width:0%;background:linear-gradient(90deg,var(--lime),#a8e83a)"></div></div>
+          <div style="display:flex;justify-content:space-between">
+            <span id="cal-pct" style="font-size:12px;color:var(--lime);font-weight:800">0% consumido</span>
+            <span id="cal-rem" style="font-size:12px;color:var(--txt3)">—</span>
+          </div>
+        </div>
+
+        <!-- Protein bar -->
+        <div class="card" style="padding-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
+            <span style="font-weight:800;font-size:15px">💪 Proteína hoy</span>
+            <span style="font-size:12px;color:var(--txt3)" id="prot-text">0 / — g</span>
+          </div>
+          <div class="bar-wrap"><div class="bar-fill" id="prot-bar" style="width:0%;background:linear-gradient(90deg,var(--teal),#3dd4a8)"></div></div>
+          <div style="display:flex;justify-content:space-between">
+            <span id="prot-pct" style="font-size:12px;color:var(--teal);font-weight:800">0% alcanzado</span>
+            <span id="prot-rem" style="font-size:12px;color:var(--txt3)">—</span>
+          </div>
+        </div>
+
+        <!-- Register food -->
+        <div class="card">
+          <p class="card-title">Registrar comida</p>
+          <div id="food-preview-wrap"></div>
+          <div id="food-upload-zone" class="upload-zone" onclick="document.getElementById('food-file').click()">
+            <p style="font-size:30px;margin-bottom:7px">📷</p>
+            <p style="font-weight:700;color:var(--txt2)">Subí foto de tu comida</p>
+            <p style="font-size:12px;margin-top:4px">Toca para elegir imagen</p>
+          </div>
+          <input type="file" id="food-file" accept="image/*" capture="environment" style="display:none" onchange="handleFoodFile(this)">
+          <input type="text" id="food-desc" class="field-input" placeholder="Descripción (opcional: 'pollo a la plancha con arroz')" style="margin:11px 0">
+          <button id="btn-analyze-food" class="btn-primary" onclick="analyzeFood()" disabled>Analizar calorías ↗</button>
+        </div>
+        <div id="nutrition-spinner"></div>
+        <div id="meals-list"></div>
+
+        <!-- Ingredients -->
+        <div class="card" style="margin-top:4px">
+          <p class="card-title">🥦 Mis Ingredientes</p>
+          <p style="font-size:12px;color:var(--txt3);margin-bottom:11px">Ingresá los ingredientes y suplementos que tenés en casa</p>
+          <div style="display:flex;gap:9px;margin-bottom:11px">
+            <input type="text" id="ingredient-input" class="field-input" placeholder="Ej: pollo, avena, proteína whey..." style="flex:1" onkeydown="if(event.key==='Enter')addIngredient()">
+            <button onclick="addIngredient()" class="btn-add">+</button>
+          </div>
+          <div id="ingredients-tags" style="display:flex;flex-wrap:wrap;gap:7px;min-height:28px;margin-bottom:13px"></div>
+          <button id="btn-gen-diet" class="btn-primary" onclick="generateDietPlan()" style="opacity:0.35" disabled>Generar plan de dieta semanal ↗</button>
+        </div>
+
+        <!-- Diet plan -->
+        <div id="diet-plan-wrap" style="display:none">
+          <div class="card">
+            <p class="card-title">📅 Plan de dieta semanal</p>
+            <div class="day-tabs" id="diet-day-tabs"></div>
+            <div id="diet-day-content"></div>
+          </div>
+        </div>
+
+        <!-- Nutritionist chat -->
+        <div id="nutri-chat-wrap" style="display:none">
+          <div class="card">
+            <p class="card-title">💬 Consultá a tu nutricionista</p>
+            <div id="nutri-chat-messages" class="chat-box"></div>
+            <div class="chat-input-row">
+              <textarea id="nutri-chat-input" class="chat-textarea" placeholder="Ej: ¿Puedo reemplazar el pollo por atún? ¿Qué snack puedo comer a la noche?..."></textarea>
+              <button onclick="sendNutriChat()" class="chat-send">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SUPER ── -->
+      <div id="screen-super" class="screen">
+        <p class="section-title">Súper Inteligente</p>
+        <p class="section-sub">Analizá productos y gestioná tu lista</p>
+
+        <!-- Shopping list -->
+        <div class="card">
+          <p class="card-title">🛒 Lista de compras</p>
+          <div style="display:flex;gap:9px;margin-bottom:11px">
+            <input type="text" id="shopping-manual-input" class="field-input" placeholder="Agregar producto..." style="flex:1" onkeydown="if(event.key==='Enter')addManualShoppingItem()">
+            <button onclick="addManualShoppingItem()" class="btn-add">+</button>
+          </div>
+          <div id="shopping-list-items"><p style="font-size:13px;color:var(--txt3);text-align:center;padding:8px 0">Tu lista está vacía</p></div>
+          <div id="shopping-list-footer" style="display:none;padding-top:10px;border-top:1px solid var(--line);margin-top:6px">
+            <button onclick="clearShoppingList()" class="btn-ghost" style="width:100%">Limpiar lista</button>
+          </div>
+        </div>
+
+        <!-- Product analyzer -->
+        <div class="card">
+          <p class="card-title">🔍 Analizar producto</p>
+          <div id="product-preview-wrap"></div>
+          <div id="product-upload-zone" class="upload-zone" onclick="document.getElementById('product-file').click()">
+            <p style="font-size:32px;margin-bottom:7px">🛒</p>
+            <p style="font-weight:700;color:var(--txt2)">Foto del producto</p>
+            <p style="font-size:12px;margin-top:4px">Etiqueta, frente o info nutricional</p>
+          </div>
+          <input type="file" id="product-file" accept="image/*" capture="environment" style="display:none" onchange="handleProductFile(this)">
+          <button id="btn-analyze-product" class="btn-primary" onclick="analyzeProduct()" style="margin-top:11px;display:none">Analizar producto ↗</button>
+        </div>
+        <div id="product-spinner"></div>
+        <div id="product-result"></div>
+      </div>
+
+      <!-- ── SETUP ── -->
+      <div id="screen-setup" class="screen">
+        <p class="section-title">Mi Perfil</p>
+        <p class="section-sub">Configurá tus datos para personalizar todo</p>
+        <div class="card">
+          <p class="card-title">Datos personales</p>
+          <div class="grid2" style="margin-bottom:12px">
+            <div><label class="field-label">Peso actual (kg)</label><input type="number" id="p-weight" class="field-input" placeholder="85" oninput="calcTDEE()"></div>
+            <div><label class="field-label">Altura (cm)</label><input type="number" id="p-height" class="field-input" placeholder="165" oninput="calcTDEE()"></div>
+            <div><label class="field-label">Edad</label><input type="number" id="p-age" class="field-input" placeholder="30" oninput="calcTDEE()"></div>
+            <div><label class="field-label">Tu nombre</label><input type="text" id="p-name" class="field-input" placeholder="Ana"></div>
+          </div>
+          <label class="field-label">Nivel de actividad</label>
+          <div class="pills">
+            <button class="pill" onclick="setActivity('sedentario',this)">Sedentario</button>
+            <button class="pill" onclick="setActivity('ligero',this)">Ligero</button>
+            <button class="pill active" onclick="setActivity('moderado',this)">Moderado</button>
+            <button class="pill" onclick="setActivity('activo',this)">Activo</button>
+          </div>
+        </div>
+        <div id="tdee-card" style="display:none" class="card fade">
+          <p class="card-title">Tu plan diario</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="text-align:center"><p id="tdee-val" style="font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;color:var(--lime)">—</p><p style="font-size:10px;color:var(--txt3)">kcal manten.</p></div>
+            <div style="text-align:center"><p id="target-val" style="font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;color:var(--teal)">—</p><p style="font-size:10px;color:var(--txt3)">kcal objetivo</p></div>
+            <div style="text-align:center"><p id="protein-val" style="font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:700;color:var(--gold)">—</p><p style="font-size:10px;color:var(--txt3)">g proteína</p></div>
+          </div>
+          <p style="font-size:12px;color:var(--txt3);margin-top:12px">Déficit de 500 kcal/día ≈ −0.5 kg/semana. La proteína alta preserva músculo mientras bajás de peso.</p>
+        </div>
+        <button class="btn-primary" onclick="saveProfile()">Guardar perfil</button>
+      </div>
+
+    </div>
+
+    <nav id="nav">
+      <button class="nav-btn active" onclick="showTab('home',this)"><span class="nav-ico">🏠</span>Inicio</button>
+      <button class="nav-btn" onclick="showTab('trainer',this)"><span class="nav-ico">🏋️</span>Trainer</button>
+      <button class="nav-btn" onclick="showTab('nutrition',this)"><span class="nav-ico">🥗</span>Nutrición</button>
+      <button class="nav-btn" onclick="showTab('super',this)"><span class="nav-ico">🛒</span>Súper</button>
+      <button class="nav-btn" onclick="showTab('setup',this)"><span class="nav-ico">⚙️</span>Perfil</button>
+    </nav>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// Dates (LOCAL TIME — Paraguay UTC-4 safe)
+// ════════════════════════════════════════════
+function localDateStr(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + dd;
+}
+function today() { return localDateStr(new Date()); }
+function currentWeekKey() {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  d.setDate(d.getDate() + diff);
+  return localDateStr(d);
+}
+function cleanOldWeekData() {
+  // Only clean plans on Mondays
+  if (new Date().getDay() !== 1) return;
+  const thisWeek = currentWeekKey();
+  const prefixes = ['fc_day_plans_', 'fc_diet_plans_', 'fc_trainer_overview_', 'fc_trainer_days_'];
+  Object.keys(localStorage).forEach(key => {
+    if (prefixes.some(p => key.startsWith(p)) && !key.endsWith(thisWeek)) localStorage.removeItem(key);
+  });
+}
+function loadTodayMeals() {
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('fc_meals_') && key !== 'fc_meals_' + today()) localStorage.removeItem(key);
+  });
+  return JSON.parse(localStorage.getItem('fc_meals_' + today()) || '[]');
+}
+
+// ════════════════════════════════════════════
+// State
+// ════════════════════════════════════════════
+let API_KEY = localStorage.getItem('fc_api_key') || '';
+let profile = JSON.parse(localStorage.getItem('fc_profile') || 'null');
+let meals = loadTodayMeals();
+let gymDays = JSON.parse(localStorage.getItem('fc_gym_days') || '[]');
+let selectedActivity = 'moderado';
+let trainerPlan = '';
+let trainerChatHistory = [];
+let nutriChatHistory = [];
+let dayPlans = {};
+let dayPlansCache = JSON.parse(localStorage.getItem('fc_day_plans_' + currentWeekKey()) || '{}');
+let dietDayPlans = JSON.parse(localStorage.getItem('fc_diet_plans_' + currentWeekKey()) || '{}');
+let ingredients = JSON.parse(localStorage.getItem('fc_ingredients') || '[]');
+let shoppingList = JSON.parse(localStorage.getItem('fc_shopping') || '[]');
+let currentSuggestions = [];
+let activeDayTab = null;
+let foodImageB64 = null, productImageB64 = null;
+const WEEK_DAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+// ════════════════════════════════════════════
+// API
+// ════════════════════════════════════════════
+async function callClaude(opts) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-5',
+      max_tokens: opts.max_tokens || 1000,
+      system: opts.system,
+      messages: opts.messages
+    })
+  });
+  if (!res.ok) {
+    let errMsg = 'Error ' + res.status;
+    try { const e = await res.json(); errMsg = e.error && e.error.message ? e.error.message : errMsg; } catch (x) {}
+    throw new Error(errMsg);
+  }
+  const data = await res.json();
+  let out = '';
+  (data.content || []).forEach(b => { if (b.type === 'text') out += b.text; });
+  return out;
+}
+
+function extractJSON(raw) {
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('Respuesta sin JSON: ' + raw.slice(0, 80));
+  return JSON.parse(match[0]);
+}
+
+// Compress images before sending — iPhone photos are too big for the API
+function compressImage(file, maxDim, quality) {
+  maxDim = maxDim || 1100;
+  quality = quality || 0.78;
+  return new Promise(function(resolve, reject) {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+      try {
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w > maxDim || h > maxDim) {
+          const s = maxDim / Math.max(w, h);
+          w = Math.round(w * s); h = Math.round(h * s);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        URL.revokeObjectURL(url);
+        resolve(dataUrl.split(',')[1]);
+      } catch (e) { reject(e); }
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); reject(new Error('No pude leer la imagen')); };
+    img.src = url;
+  });
+}
+
+// ════════════════════════════════════════════
+// Init / API key
+// ════════════════════════════════════════════
+window.onload = function() {
+  if (!API_KEY) document.getElementById('api-setup').style.display = 'flex';
+  else startApp();
+};
+function saveApiKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  if (!k.startsWith('sk-ant-')) { alert('La key debe empezar con sk-ant-'); return; }
+  localStorage.setItem('fc_api_key', k);
+  API_KEY = k;
+  document.getElementById('api-setup').style.display = 'none';
+  startApp();
+}
+function clearApiKey() {
+  if (!confirm('¿Cambiar la API key?')) return;
+  localStorage.removeItem('fc_api_key');
+  API_KEY = '';
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('api-setup').style.display = 'flex';
+  document.getElementById('api-key-input').value = '';
+}
+function startApp() {
+  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('main-app').style.flexDirection = 'column';
+  cleanOldWeekData();
+  if (profile) loadProfile();
+  updateBars();
+  renderMeals();
+  renderIngredientTags();
+  renderShoppingList();
+  restoreTrainerPlan();
+  restoreDietPlan();
+  restoreGymDayButtons();
+  setupChatInputs();
+}
+
+// ════════════════════════════════════════════
+// Navigation
+// ════════════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'setup' && profile) loadProfileForm();
+}
+
+// ════════════════════════════════════════════
+// Profile
+// ════════════════════════════════════════════
+function setActivity(val, btn) {
+  selectedActivity = val;
+  document.querySelectorAll('#screen-setup .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  calcTDEE();
+}
+function calcTDEE() {
+  const w = parseFloat(document.getElementById('p-weight').value);
+  const h = parseFloat(document.getElementById('p-height').value);
+  const a = parseInt(document.getElementById('p-age').value);
+  if (!w || !h || !a) { document.getElementById('tdee-card').style.display = 'none'; return null; }
+  const bmr = 10 * w + 6.25 * h - 5 * a - 161;
+  const mults = { sedentario: 1.2, ligero: 1.375, moderado: 1.55, activo: 1.725 };
+  const tdee = Math.round(bmr * (mults[selectedActivity] || 1.55));
+  const target = Math.max(1200, tdee - 500);
+  const protein = proteinTargetFor(w);
+  document.getElementById('tdee-val').textContent = tdee;
+  document.getElementById('target-val').textContent = target;
+  document.getElementById('protein-val').textContent = protein;
+  document.getElementById('tdee-card').style.display = 'block';
+  return { tdee: tdee, target: target, protein: protein };
+}
+function proteinTargetFor(weight) {
+  // 1.8 g per kg of goal weight (current − 30), min 100 g — preserves muscle in a deficit
+  const goalW = Math.max(parseFloat(weight) - 30, 45);
+  return Math.max(100, Math.round(goalW * 1.8));
+}
+function saveProfile() {
+  const w = document.getElementById('p-weight').value;
+  const h = document.getElementById('p-height').value;
+  const a = document.getElementById('p-age').value;
+  const name = document.getElementById('p-name').value;
+  const res = calcTDEE();
+  profile = {
+    weight: w, height: h, age: a, name: name, activity: selectedActivity,
+    tdee: res ? res.tdee : null,
+    targetCal: res ? res.target : null,
+    proteinTarget: res ? res.protein : null
+  };
+  localStorage.setItem('fc_profile', JSON.stringify(profile));
+  loadProfile();
+  updateBars();
+  showTab('home', document.querySelector('.nav-btn'));
+}
+function loadProfile() {
+  if (!profile) return;
+  const g = document.getElementById('home-greeting');
+  if (g) g.textContent = 'Hola' + (profile.name ? ', ' + profile.name : '') + ' 👋';
+  renderHomeMetrics();
+}
+function loadProfileForm() {
+  if (!profile) return;
+  document.getElementById('p-weight').value = profile.weight || '';
+  document.getElementById('p-height').value = profile.height || '';
+  document.getElementById('p-age').value = profile.age || '';
+  document.getElementById('p-name').value = profile.name || '';
+  selectedActivity = profile.activity || 'moderado';
+  document.querySelectorAll('#screen-setup .pill').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().indexOf(selectedActivity.slice(0, 4)) !== -1);
+  });
+  calcTDEE();
+}
+function renderHomeMetrics() {
+  const el = document.getElementById('home-metrics');
+  if (!el) return;
+  if (!profile || !profile.weight) {
+    el.innerHTML = '<div class="card" style="text-align:center;padding:32px"><p style="font-size:36px;margin-bottom:8px">⚙️</p><p style="font-weight:700;color:var(--txt2)">Completá tu perfil primero</p><p style="font-size:13px;color:var(--txt3);margin-top:6px">Tocá el ícono ⚙️ abajo</p></div>';
+    return;
+  }
+  const wGoal = parseFloat(profile.weight) - 30;
+  let bars = '';
+  for (let m = 1; m <= 6; m++) {
+    const lost = Math.min(m * 5, 30);
+    const pct = (lost / 30) * 100;
+    bars += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">' +
+      '<span style="font-size:11px;color:var(--txt3);width:48px;flex-shrink:0">Mes ' + m + '</span>' +
+      '<div style="flex:1;background:var(--bg2);border-radius:5px;height:7px;border:1px solid var(--line)"><div style="width:' + pct + '%;background:linear-gradient(90deg,var(--lime),var(--teal));height:100%;border-radius:5px"></div></div>' +
+      '<span style="font-size:11px;color:var(--lime);width:42px;text-align:right;flex-shrink:0">−' + lost + ' kg</span></div>';
+  }
+  el.innerHTML =
+    '<div class="grid2" style="margin-bottom:13px">' +
+    '<div class="metric-card"><p class="metric-lbl">Peso actual</p><p class="metric-val" style="color:var(--lime)">' + profile.weight + ' kg</p></div>' +
+    '<div class="metric-card"><p class="metric-lbl">Peso objetivo</p><p class="metric-val" style="color:var(--teal)">' + wGoal + ' kg</p></div>' +
+    '<div class="metric-card"><p class="metric-lbl">Kcal/día</p><p class="metric-val" style="color:var(--gold)">' + (profile.targetCal || '—') + '</p></div>' +
+    '<div class="metric-card"><p class="metric-lbl">Proteína/día</p><p class="metric-val" style="color:var(--violet)">' + (profile.proteinTarget || '—') + ' g</p></div>' +
+    '</div><div class="card"><p class="card-title">Progreso estimado</p>' + bars + '</div>';
+}
+
+// ════════════════════════════════════════════
+// Bars (calories + protein)
+// ════════════════════════════════════════════
+function updateBars() {
+  const consumed = meals.reduce(function(s, m) { return s + (m.calories || 0); }, 0);
+  const protein = meals.reduce(function(s, m) { return s + (m.protein || 0); }, 0);
+  const calTarget = profile && profile.targetCal ? profile.targetCal : 0;
+  const protTarget = profile && profile.proteinTarget ? profile.proteinTarget :
+    (profile && profile.weight ? proteinTargetFor(profile.weight) : 0);
+
+  // Calories
+  const cPct = calTarget ? Math.round((consumed / calTarget) * 100) : 0;
+  const calBar = document.getElementById('cal-bar');
+  if (calBar) {
+    calBar.style.width = Math.min(cPct, 100) + '%';
+    calBar.style.background = cPct > 95 ? 'linear-gradient(90deg,var(--red),#e85555)' : 'linear-gradient(90deg,var(--lime),#a8e83a)';
+  }
+  setText('cal-text', consumed + ' / ' + (calTarget || '—') + ' kcal');
+  const cp = document.getElementById('cal-pct');
+  if (cp) { cp.textContent = cPct + '% consumido'; cp.style.color = cPct > 95 ? 'var(--red)' : 'var(--lime)'; }
+  setText('cal-rem', calTarget ? (calTarget - consumed > 0 ? 'Quedan ' + (calTarget - consumed) + ' kcal' : 'Exceso: ' + Math.abs(calTarget - consumed) + ' kcal') : 'Completá tu perfil');
+
+  // Protein
+  const pPct = protTarget ? Math.round((protein / protTarget) * 100) : 0;
+  const pBar = document.getElementById('prot-bar');
+  if (pBar) pBar.style.width = Math.min(pPct, 100) + '%';
+  setText('prot-text', protein + ' / ' + (protTarget || '—') + ' g');
+  const pp = document.getElementById('prot-pct');
+  if (pp) pp.textContent = pPct + '% alcanzado';
+  setText('prot-rem', protTarget ? (protTarget - protein > 0 ? 'Faltan ' + (protTarget - protein) + ' g' : '¡Meta alcanzada! 💪') : 'Completá tu perfil');
+}
+function setText(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
+
+// ════════════════════════════════════════════
+// Food analysis
+// ════════════════════════════════════════════
+async function handleFoodFile(input) {
+  const file = input.files[0]; if (!file) return;
+  try {
+    foodImageB64 = await compressImage(file);
+  } catch (e) { alert('No pude procesar la imagen: ' + e.message); return; }
+  const url = URL.createObjectURL(file);
+  document.getElementById('food-upload-zone').style.display = 'none';
+  document.getElementById('food-preview-wrap').innerHTML =
+    '<div style="position:relative;margin-bottom:11px"><img src="' + url + '" style="width:100%;border-radius:12px;max-height:190px;object-fit:cover">' +
+    '<button onclick="clearFoodImage()" style="position:absolute;top:7px;right:7px;background:rgba(0,0,0,0.75);border:none;border-radius:20px;color:#fff;padding:5px 11px;cursor:pointer;font-size:12px">✕</button></div>';
+  document.getElementById('btn-analyze-food').disabled = false;
+}
+function clearFoodImage() {
+  foodImageB64 = null;
+  document.getElementById('food-preview-wrap').innerHTML = '';
+  document.getElementById('food-upload-zone').style.display = 'block';
+  document.getElementById('food-file').value = '';
+  document.getElementById('btn-analyze-food').disabled = !document.getElementById('food-desc').value;
+}
+async function analyzeFood() {
+  const desc = document.getElementById('food-desc').value;
+  if (!foodImageB64 && !desc) return;
+  const btn = document.getElementById('btn-analyze-food');
+  btn.disabled = true; btn.textContent = 'Analizando...';
+  document.getElementById('nutrition-spinner').innerHTML = '<div class="spinner"></div>';
+  const content = [];
+  if (foodImageB64) content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: foodImageB64 } });
+  content.push({ type: 'text', text: 'Analizá esta comida' + (desc ? ': ' + desc : '') + '. Respondé SOLO con JSON válido sin backticks:\n{"name":"nombre del plato","calories":numero,"protein":numero,"carbs":numero,"fat":numero,"suggestion":"sugerencia breve de mejora"}' });
+  try {
+    const raw = await callClaude({
+      system: 'Sos un nutricionista experto. Respondés SOLO en JSON válido, sin backticks, sin texto extra. Estimaciones precisas.',
+      messages: [{ role: 'user', content: content }],
+      max_tokens: 400
+    });
+    const parsed = extractJSON(raw);
+    parsed.name = parsed.name || desc || 'Comida';
+    parsed.calories = parseInt(parsed.calories) || 0;
+    parsed.protein = parseInt(parsed.protein) || 0;
+    parsed.carbs = parseInt(parsed.carbs) || 0;
+    parsed.fat = parseInt(parsed.fat) || 0;
+    parsed.time = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    parsed.id = Date.now();
+    meals.push(parsed);
+    localStorage.setItem('fc_meals_' + today(), JSON.stringify(meals));
+    clearFoodImage();
+    document.getElementById('food-desc').value = '';
+    renderMeals();
+    updateBars();
+  } catch (e) {
+    alert('Error al analizar: ' + (e.message || '').slice(0, 140));
+  }
+  document.getElementById('nutrition-spinner').innerHTML = '';
+  btn.disabled = false;
+  btn.textContent = 'Analizar calorías ↗';
+}
+function renderMeals() {
+  const c = document.getElementById('meals-list');
+  if (!c) return;
+  if (!meals.length) { c.innerHTML = ''; return; }
+  const consumed = meals.reduce(function(s, m) { return s + (m.calories || 0); }, 0);
+  let rows = '';
+  meals.forEach(function(m) {
+    rows += '<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)">' +
+      '<div style="flex:1"><p style="font-weight:700;font-size:14px">' + m.name + '</p>' +
+      '<p style="font-size:11px;color:var(--txt3);margin-top:2px">' + m.time + ' · P: ' + m.protein + 'g C: ' + m.carbs + 'g G: ' + m.fat + 'g</p>' +
+      (m.suggestion ? '<p style="font-size:11px;color:var(--txt2);font-style:italic;margin-top:3px">' + m.suggestion + '</p>' : '') + '</div>' +
+      '<div style="text-align:right;margin-left:10px"><p style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:17px;color:var(--lime)">' + m.calories + '</p><p style="font-size:10px;color:var(--txt3)">kcal</p></div>' +
+      '<button onclick="deleteMeal(' + m.id + ')" style="background:none;border:none;color:#3a3a50;cursor:pointer;font-size:16px;margin-left:8px;padding:4px">✕</button></div>';
+  });
+  c.innerHTML = '<div class="card fade"><p class="card-title">Comidas de hoy</p>' + rows +
+    '<div style="padding-top:11px;display:flex;justify-content:space-between"><span style="font-size:13px;font-weight:700;color:var(--txt2)">Total del día</span>' +
+    '<span style="font-family:\'Space Grotesk\',sans-serif;font-size:16px;font-weight:700;color:var(--lime)">' + consumed + ' kcal</span></div></div>';
+}
+function deleteMeal(id) {
+  meals = meals.filter(function(m) { return m.id !== id; });
+  localStorage.setItem('fc_meals_' + today(), JSON.stringify(meals));
+  renderMeals();
+  updateBars();
+}
+
+// ════════════════════════════════════════════
+// Trainer
+// ════════════════════════════════════════════
+function getTrainerSystem() {
+  let ctx = 'Sos un entrenador personal experto. Respondé siempre en español rioplatense. Sos motivador, específico y práctico. Usá emojis ocasionalmente. NO uses markdown: nada de # ni **, texto plano con saltos de línea.';
+  if (profile && profile.weight) ctx += ' Peso actual del usuario: ' + profile.weight + 'kg.';
+  if (gymDays.length) ctx += ' Días de entrenamiento: ' + gymDays.join(', ') + '.';
+  if (trainerPlan) ctx += '\n\nPlan semanal ya generado para el usuario:\n' + trainerPlan;
+  ctx += '\n\nEl objetivo es bajar 30 kg en 6 meses. Respondé las preguntas en base al plan.';
+  return ctx;
+}
+function getEquipmentContext(loc) {
+  if (loc === 'home') return 'IMPORTANTE: entrenamiento EN CASA. Equipamiento: caminadora y set pequeño de mancuernas. NO incluyas máquinas de gimnasio ni barras olímpicas.';
+  return 'Entrenamiento en GIMNASIO con equipamiento completo.';
+}
+function toggleDay(day, btn) {
+  btn.classList.toggle('active');
+  if (gymDays.indexOf(day) !== -1) gymDays = gymDays.filter(function(d) { return d !== day; });
+  else gymDays.push(day);
+  localStorage.setItem('fc_gym_days', JSON.stringify(gymDays));
+  document.getElementById('btn-gen-plan').disabled = gymDays.length === 0;
+}
+function restoreGymDayButtons() {
+  if (!gymDays.length) return;
+  const dayMap = { 'Lun': 'Lunes', 'Mar': 'Martes', 'Mié': 'Miércoles', 'Jue': 'Jueves', 'Vie': 'Viernes', 'Sáb': 'Sábado', 'Dom': 'Domingo' };
+  document.querySelectorAll('#day-pills .pill').forEach(function(btn) {
+    const full = dayMap[btn.textContent.trim()];
+    if (full && gymDays.indexOf(full) !== -1) btn.classList.add('active');
+  });
+  document.getElementById('btn-gen-plan').disabled = false;
+}
+function renderTrainerTabs(days) {
+  let tabs = '';
+  days.forEach(function(d, i) {
+    tabs += '<button class="day-tab' + (i === 0 ? ' active' : '') + '" onclick="showDayTab(\'' + d + '\',this)">' + d.slice(0, 3) + '</button>';
+  });
+  document.getElementById('trainer-result').innerHTML =
+    '<div class="card fade"><p class="card-title">Tu plan semanal · 🏋️ Gimnasio</p>' +
+    '<div class="day-tabs">' + tabs + '</div><div id="day-tab-content"></div></div>';
+}
+async function generatePlan() {
+  const btn = document.getElementById('btn-gen-plan');
+  btn.disabled = true; btn.textContent = 'Generando plan...';
+  document.getElementById('trainer-result').innerHTML = '<div class="spinner"></div>';
+  trainerChatHistory = [];
+  dayPlans = {};
+  dayPlansCache = {};
+  localStorage.removeItem('fc_day_plans_' + currentWeekKey());
+  const userMsg = 'Mi objetivo es bajar 30 kg en 6 meses. Entreno en gimnasio. Días: ' + gymDays.join(', ') + '. ' +
+    (profile && profile.weight ? 'Peso ' + profile.weight + 'kg. ' : '') +
+    'Para cada día indicá en una línea: grupo muscular principal | secundario | cardio recomendado. Sin markdown.';
+  try {
+    const overview = await callClaude({ system: getTrainerSystem(), messages: [{ role: 'user', content: userMsg }], max_tokens: 400 });
+    trainerPlan = overview;
+    trainerChatHistory = [{ role: 'user', content: userMsg }, { role: 'assistant', content: overview }];
+    localStorage.setItem('fc_trainer_overview_' + currentWeekKey(), overview);
+    localStorage.setItem('fc_trainer_days_' + currentWeekKey(), JSON.stringify(gymDays));
+    renderTrainerTabs(gymDays);
+    document.getElementById('trainer-chat-wrap').style.display = 'block';
+    document.getElementById('trainer-chat-messages').innerHTML = '';
+    activeDayTab = gymDays[0];
+    await loadDayTab(gymDays[0], 'gym');
+  } catch (e) {
+    document.getElementById('trainer-result').innerHTML = '<div class="card"><p style="color:var(--red);font-size:13px">Error: ' + e.message + '</p></div>';
+  }
+  btn.disabled = false; btn.textContent = 'Generar plan de entrenamiento ↗';
+}
+async function showDayTab(day, btn) {
+  document.querySelectorAll('#trainer-result .day-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  activeDayTab = day;
+  const c = document.getElementById('day-tab-content');
+  const mode = (c && c.dataset.mode) || 'gym';
+  await loadDayTab(day, mode);
+}
+async function loadDayTab(day, mode) {
+  const cacheKey = day + '_' + mode;
+  const container = document.getElementById('day-tab-content');
+  if (!container) return;
+  container.dataset.mode = mode;
+  if (dayPlans[cacheKey]) { renderDayTab(day, mode, dayPlans[cacheKey]); return; }
+  if (dayPlansCache[cacheKey]) { dayPlans[cacheKey] = dayPlansCache[cacheKey]; renderDayTab(day, mode, dayPlansCache[cacheKey]); return; }
+  container.innerHTML = '<div class="spinner"></div>';
+  const locLabel = mode === 'gym' ? 'gimnasio' : 'casa (caminadora + mancuernas)';
+  const prompt = 'Dame la rutina completa para el día ' + day + ' en ' + locLabel + '. ' + getEquipmentContext(mode) +
+    ' Formato: cada ejercicio en una línea que empiece con guion: nombre, series x repeticiones, tip breve. Máximo 6 ejercicios. Al final el cardio recomendado. Sin markdown.';
+  try {
+    const text = await callClaude({ system: getTrainerSystem(), messages: trainerChatHistory.concat([{ role: 'user', content: prompt }]), max_tokens: 600 });
+    dayPlans[cacheKey] = text;
+    dayPlansCache[cacheKey] = text;
+    localStorage.setItem('fc_day_plans_' + currentWeekKey(), JSON.stringify(dayPlansCache));
+    renderDayTab(day, mode, text);
+  } catch (e) {
+    container.innerHTML = '<p style="color:var(--red);font-size:13px">Error: ' + e.message + '</p>';
+  }
+}
+function renderDayTab(day, mode, text) {
+  const container = document.getElementById('day-tab-content');
+  if (!container) return;
+  container.dataset.mode = mode;
+  const isHome = mode === 'home';
+  const clean = text.replace(/^#{1,4} /gm, '').replace(/[*][*]/g, '').replace(/[*]/g, '').trim();
+  const lines = clean.split('\n');
+  let html = '';
+  lines.forEach(function(line) {
+    const l = line.trim();
+    if (!l) return;
+    if (/^[-•]/.test(l) || /^[0-9]+[.)]/.test(l)) {
+      const txt = l.replace(/^[-•]\s*/, '').replace(/^[0-9]+[.)]\s*/, '');
+      html += '<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:flex-start">' +
+        '<span style="color:var(--lime);font-weight:900;flex-shrink:0;margin-top:1px">·</span>' +
+        '<span style="font-size:14px;color:#d4d4c8;line-height:1.55">' + txt + '</span></div>';
+    } else if (/cardio|caminadora|calentamiento|vuelta a la calma/i.test(l) && l.length < 90) {
+      html += '<p style="font-size:11px;font-weight:800;color:var(--txt2);letter-spacing:0.8px;text-transform:uppercase;margin:15px 0 5px">' + l + '</p>';
+    } else {
+      html += '<p style="font-size:13px;color:var(--txt2);line-height:1.6;margin:4px 0">' + l + '</p>';
+    }
+  });
+  const badge = isHome
+    ? '<span style="background:rgba(83,230,192,0.1);color:var(--teal);border:1px solid rgba(83,230,192,0.35);border-radius:20px;font-size:11px;padding:4px 11px;font-weight:800">🏠 Casa</span>'
+    : '<span style="background:rgba(198,255,77,0.1);color:var(--lime);border:1px solid rgba(198,255,77,0.35);border-radius:20px;font-size:11px;padding:4px 11px;font-weight:800">🏋️ Gym</span>';
+  const toggleBtn = isHome
+    ? '<button onclick="loadDayTab(\'' + day + '\',\'gym\')" style="width:100%;margin-top:15px;background:rgba(198,255,77,0.07);color:var(--lime);border:1px solid rgba(198,255,77,0.35);border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer">🏋️ Ver versión gimnasio</button>'
+    : '<button onclick="loadDayTab(\'' + day + '\',\'home\')" style="width:100%;margin-top:15px;background:rgba(83,230,192,0.07);color:var(--teal);border:1px solid rgba(83,230,192,0.35);border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer">🏠 Entrenar desde casa hoy</button>';
+  container.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+    '<p style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:17px;color:#fff">' + day + '</p>' + badge + '</div>' +
+    '<div>' + html + '</div>' + toggleBtn;
+}
+function restoreTrainerPlan() {
+  const wk = currentWeekKey();
+  const savedDays = JSON.parse(localStorage.getItem('fc_trainer_days_' + wk) || 'null');
+  const savedOverview = localStorage.getItem('fc_trainer_overview_' + wk);
+  if (!savedDays || !savedOverview) return;
+  gymDays = savedDays;
+  trainerPlan = savedOverview;
+  trainerChatHistory = [{ role: 'user', content: 'plan de la semana' }, { role: 'assistant', content: savedOverview }];
+  dayPlans = {};
+  Object.keys(dayPlansCache).forEach(function(k) { dayPlans[k] = dayPlansCache[k]; });
+  renderTrainerTabs(gymDays);
+  document.getElementById('trainer-chat-wrap').style.display = 'block';
+  document.getElementById('btn-gen-plan').disabled = false;
+  activeDayTab = gymDays[0];
+  const firstKey = gymDays[0] + '_gym';
+  if (dayPlans[firstKey]) renderDayTab(gymDays[0], 'gym', dayPlans[firstKey]);
+  else {
+    const c = document.getElementById('day-tab-content');
+    if (c) c.innerHTML = '<p style="font-size:13px;color:var(--txt3);padding:10px 0">Tocá un día para ver la rutina</p>';
+  }
+}
+async function sendTrainerChat() {
+  await sendChat('trainer-chat-input', 'trainer-chat-messages', trainerChatHistory, getTrainerSystem);
+}
+
+// ════════════════════════════════════════════
+// Ingredients & Diet plan
+// ════════════════════════════════════════════
+function addIngredient() {
+  const input = document.getElementById('ingredient-input');
+  const val = input.value.trim();
+  if (!val) return;
+  val.split(',').forEach(function(v) {
+    const t = v.trim();
+    if (t && ingredients.indexOf(t) === -1) ingredients.push(t);
+  });
+  localStorage.setItem('fc_ingredients', JSON.stringify(ingredients));
+  input.value = '';
+  renderIngredientTags();
+}
+function removeIngredient(idx) {
+  ingredients.splice(idx, 1);
+  localStorage.setItem('fc_ingredients', JSON.stringify(ingredients));
+  renderIngredientTags();
+}
+function renderIngredientTags() {
+  const c = document.getElementById('ingredients-tags');
+  if (!c) return;
+  const btn = document.getElementById('btn-gen-diet');
+  if (!ingredients.length) {
+    c.innerHTML = '<span style="font-size:12px;color:#454560">Todavía no agregaste ingredientes</span>';
+    btn.disabled = true; btn.style.opacity = '0.35';
+    return;
+  }
+  let html = '';
+  ingredients.forEach(function(ing, i) {
+    html += '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--line2);border-radius:20px;padding:6px 12px;font-size:12px;color:#cfe8d8">' + ing +
+      '<button onclick="removeIngredient(' + i + ')" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:14px;padding:0;line-height:1">×</button></span>';
+  });
+  c.innerHTML = html;
+  btn.disabled = false; btn.style.opacity = '1';
+}
+async function generateDietPlan() {
+  const btn = document.getElementById('btn-gen-diet');
+  btn.disabled = true; btn.textContent = 'Generando plan...';
+  dietDayPlans = {};
+  localStorage.removeItem('fc_diet_plans_' + currentWeekKey());
+  let tabs = '';
+  WEEK_DAYS.forEach(function(d, i) {
+    tabs += '<button class="day-tab' + (i === 0 ? ' active' : '') + '" onclick="showDietTab(\'' + d + '\',this)">' + d.slice(0, 3) + '</button>';
+  });
+  document.getElementById('diet-day-tabs').innerHTML = tabs;
+  document.getElementById('diet-plan-wrap').style.display = 'block';
+  document.getElementById('diet-day-content').innerHTML = '<div class="spinner"></div>';
+  document.getElementById('nutri-chat-wrap').style.display = 'block';
+  document.getElementById('nutri-chat-messages').innerHTML = '';
+  nutriChatHistory = [];
+  await loadDietDay('Lunes');
+  btn.disabled = false; btn.textContent = 'Regenerar plan ↗';
+}
+async function showDietTab(day, btn) {
+  document.querySelectorAll('#diet-day-tabs .day-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  await loadDietDay(day);
+}
+async function loadDietDay(day) {
+  if (dietDayPlans[day]) { renderDietDay(day, dietDayPlans[day]); return; }
+  document.getElementById('diet-day-content').innerHTML = '<div class="spinner"></div>';
+  const calTarget = profile && profile.targetCal ? 'Objetivo: ' + profile.targetCal + ' kcal/día y ' + (profile.proteinTarget || 130) + ' g de proteína.' : '';
+  const prompt = 'Quiero bajar 30 kg en 6 meses. ' + calTarget + ' Ingredientes disponibles: ' + ingredients.join(', ') + '. ' +
+    'Para el día ' + day + ', armá desayuno, almuerzo, merienda y cena usando principalmente lo que tengo. Formato exacto para cada comida:\n\n' +
+    'DESAYUNO (o ALMUERZO/MERIENDA/CENA)\nIngredientes: lista con cantidades\nCalorias: numero kcal\nPreparacion: pasos numerados 1. 2. 3.\n\n' +
+    'Al final agregá una línea que diga exactamente SUGERENCIAS DE COMPRA y debajo exactamente 4 líneas, cada una con este formato exacto:\n' +
+    'COMPRAR: nombre del producto | razón breve de por qué mejora la dieta\n\nSin markdown, sin asteriscos, sin numerales #.';
+  try {
+    const text = await callClaude({
+      system: 'Sos una nutricionista experta. Español rioplatense. Texto plano sin markdown. Seguí el formato pedido al pie de la letra.',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 1000
+    });
+    dietDayPlans[day] = text;
+    localStorage.setItem('fc_diet_plans_' + currentWeekKey(), JSON.stringify(dietDayPlans));
+    renderDietDay(day, text);
+  } catch (e) {
+    document.getElementById('diet-day-content').innerHTML = '<p style="color:var(--red);font-size:13px">Error: ' + e.message + '</p>';
+  }
+}
+function renderDietDay(day, text) {
+  const container = document.getElementById('diet-day-content');
+  if (!container) return;
+  const suggIdx = text.search(/SUGERENCIAS DE COMPRA/i);
+  const mainText = suggIdx > -1 ? text.slice(0, suggIdx).trim() : text.trim();
+  const suggText = suggIdx > -1 ? text.slice(suggIdx) : '';
+
+  // ── Main plan ──
+  const lines = mainText.split('\n');
+  let planHtml = '';
+  let inPrep = false;
+  lines.forEach(function(line) {
+    const l = line.trim();
+    if (!l) { inPrep = false; return; }
+    if (/^(DESAYUNO|ALMUERZO|MERIENDA|CENA|SNACK)/i.test(l)) {
+      inPrep = false;
+      planHtml += '<div style="margin-top:18px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--line2)">' +
+        '<p style="font-size:12px;font-weight:800;color:var(--lime);letter-spacing:1px;text-transform:uppercase">' + l + '</p></div>';
+    } else if (/^Preparaci[oó]n/i.test(l)) {
+      inPrep = true;
+      planHtml += '<p style="font-size:11px;font-weight:800;color:var(--teal);letter-spacing:0.7px;text-transform:uppercase;margin:11px 0 5px">Preparación</p>';
+      const rest = l.replace(/^Preparaci[oó]n:?\s*/i, '');
+      if (rest) planHtml += '<p style="font-size:13px;color:#d4d4c8;line-height:1.55;margin:3px 0">' + rest + '</p>';
+    } else if (/^Ingredientes/i.test(l)) {
+      inPrep = false;
+      const val = l.replace(/^Ingredientes:?\s*/i, '');
+      planHtml += '<p style="font-size:11px;font-weight:700;color:var(--txt2);margin:7px 0 2px">Ingredientes</p>' +
+        '<p style="font-size:13px;color:var(--txt2);line-height:1.55;margin:0 0 5px">' + val + '</p>';
+    } else if (/^Calor[ií]as/i.test(l) || (/kcal/i.test(l) && l.length < 55)) {
+      inPrep = false;
+      const val = l.replace(/^Calor[ií]as:?\s*/i, '');
+      planHtml += '<div style="display:inline-flex;align-items:center;background:rgba(255,200,87,0.08);border:1px solid rgba(255,200,87,0.3);border-radius:9px;padding:4px 11px;margin:5px 0 7px">' +
+        '<span style="font-size:11px;color:var(--gold);font-weight:800">' + (val.indexOf('kcal') !== -1 ? val : val + ' kcal') + '</span></div>';
+    } else if (inPrep && /^[0-9]+[.)]/.test(l)) {
+      const num = l.match(/^([0-9]+)/)[1];
+      const stepTxt = l.replace(/^[0-9]+[.)]\s*/, '');
+      planHtml += '<div style="display:flex;gap:9px;padding:5px 0;align-items:flex-start">' +
+        '<span style="background:rgba(83,230,192,0.12);color:var(--teal);border-radius:50%;width:21px;height:21px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex-shrink:0;margin-top:1px">' + num + '</span>' +
+        '<span style="font-size:13px;color:#d4d4c8;line-height:1.55">' + stepTxt + '</span></div>';
+    } else if (inPrep) {
+      planHtml += '<p style="font-size:13px;color:#d4d4c8;line-height:1.55;margin:3px 0">' + l + '</p>';
+    } else {
+      planHtml += '<p style="font-size:13px;color:var(--txt2);line-height:1.6;margin:3px 0">' + l + '</p>';
+    }
+  });
+
+  // ── Suggestions: parse COMPRAR: name | reason ──
+  currentSuggestions = [];
+  let suggHtml = '';
+  if (suggText) {
+    const sLines = suggText.split('\n');
+    sLines.forEach(function(line) {
+      let l = line.trim();
+      if (!l || /^SUGERENCIAS DE COMPRA/i.test(l)) return;
+      l = l.replace(/^[-•]\s*/, '').replace(/^[0-9]+[.)]\s*/, '');
+      let name = '', reason = '';
+      if (/^COMPRAR:/i.test(l)) {
+        const body = l.replace(/^COMPRAR:\s*/i, '');
+        const parts = body.split('|');
+        name = (parts[0] || '').trim();
+        reason = (parts[1] || '').trim();
+      } else if (l.indexOf(':') > 0 && l.length > 12) {
+        // fallback for "Producto: razón" format
+        const ci = l.indexOf(':');
+        name = l.slice(0, ci).trim();
+        reason = l.slice(ci + 1).trim();
+      }
+      if (name) currentSuggestions.push({ name: name, reason: reason });
+    });
+    currentSuggestions.forEach(function(s, i) {
+      suggHtml += '<div class="sugg-card">' +
+        '<div style="flex:1"><p class="sugg-name">' + s.name + '</p>' +
+        (s.reason ? '<p class="sugg-reason">' + s.reason + '</p>' : '') + '</div>' +
+        '<button id="sugg-btn-' + i + '" class="sugg-btn" onclick="addSuggestion(' + i + ')">+ Súper</button></div>';
+    });
+  }
+
+  container.innerHTML =
+    '<div style="margin-bottom:14px">' + planHtml + '</div>' +
+    (suggHtml ?
+      '<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">' +
+      '<p style="font-size:12px;font-weight:800;color:var(--teal);letter-spacing:0.7px">SUGERENCIAS DE COMPRA</p>' +
+      '<button onclick="addAllSuggestions()" class="btn-ghost" style="color:var(--lime);border-color:rgba(198,255,77,0.35)">Agregar todas</button></div>' +
+      suggHtml + '</div>' : '');
+}
+function addSuggestion(i) {
+  const s = currentSuggestions[i];
+  if (!s) return;
+  if (shoppingList.indexOf(s.name) === -1) {
+    shoppingList.push(s.name);
+    localStorage.setItem('fc_shopping', JSON.stringify(shoppingList));
+    renderShoppingList();
+  }
+  const btn = document.getElementById('sugg-btn-' + i);
+  if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); }
+}
+function addAllSuggestions() {
+  let count = 0;
+  currentSuggestions.forEach(function(s, i) {
+    if (shoppingList.indexOf(s.name) === -1) { shoppingList.push(s.name); count++; }
+    const btn = document.getElementById('sugg-btn-' + i);
+    if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); }
+  });
+  localStorage.setItem('fc_shopping', JSON.stringify(shoppingList));
+  renderShoppingList();
+  alert('✓ ' + count + ' producto' + (count === 1 ? '' : 's') + ' agregado' + (count === 1 ? '' : 's') + ' a tu lista del Súper');
+}
+function restoreDietPlan() {
+  if (!Object.keys(dietDayPlans).length) return;
+  let tabs = '';
+  WEEK_DAYS.forEach(function(d, i) {
+    tabs += '<button class="day-tab' + (i === 0 ? ' active' : '') + '" onclick="showDietTab(\'' + d + '\',this)">' + d.slice(0, 3) + '</button>';
+  });
+  document.getElementById('diet-day-tabs').innerHTML = tabs;
+  document.getElementById('diet-plan-wrap').style.display = 'block';
+  document.getElementById('nutri-chat-wrap').style.display = 'block';
+  const first = WEEK_DAYS.find(function(d) { return dietDayPlans[d]; });
+  if (first) renderDietDay(first, dietDayPlans[first]);
+  else document.getElementById('diet-day-content').innerHTML = '<p style="font-size:13px;color:var(--txt3);padding:10px 0">Tocá un día para ver el plan</p>';
+  const btn = document.getElementById('btn-gen-diet');
+  if (btn) btn.textContent = 'Regenerar plan ↗';
+}
+
+// ════════════════════════════════════════════
+// Nutritionist chat
+// ════════════════════════════════════════════
+function getNutriSystem() {
+  let ctx = 'Sos una nutricionista experta y empática. Español rioplatense, claro y práctico. Sin markdown, sin asteriscos, sin #.';
+  if (ingredients.length) ctx += ' Ingredientes disponibles: ' + ingredients.join(', ') + '.';
+  if (profile && profile.targetCal) ctx += ' Objetivo: ' + profile.targetCal + ' kcal y ' + (profile.proteinTarget || '—') + ' g de proteína por día.';
+  const days = Object.keys(dietDayPlans);
+  if (days.length) {
+    ctx += '\n\nPlan de alimentación semanal ya generado:\n';
+    days.forEach(function(d) { ctx += '\n--- ' + d.toUpperCase() + ' ---\n' + dietDayPlans[d] + '\n'; });
+  }
+  if (meals.length) {
+    const consumed = meals.reduce(function(s, m) { return s + (m.calories || 0); }, 0);
+    const prot = meals.reduce(function(s, m) { return s + (m.protein || 0); }, 0);
+    ctx += '\n\nComidas registradas hoy (' + consumed + ' kcal, ' + prot + ' g proteína):\n';
+    meals.forEach(function(m) { ctx += '- ' + m.name + ': ' + m.calories + ' kcal (P:' + m.protein + 'g)\n'; });
+  }
+  ctx += '\n\nEl objetivo del usuario es bajar 30 kg en 6 meses. Respondé en base a ese contexto.';
+  return ctx;
+}
+async function sendNutriChat() {
+  await sendChat('nutri-chat-input', 'nutri-chat-messages', nutriChatHistory, getNutriSystem);
+}
+
+// ════════════════════════════════════════════
+// Shared chat helper
+// ════════════════════════════════════════════
+async function sendChat(inputId, boxId, history, systemFn) {
+  const input = document.getElementById(inputId);
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  input.style.height = '46px';
+  const box = document.getElementById(boxId);
+  box.innerHTML += '<div class="chat-user">' + msg + '</div>';
+  const typingId = boxId + '-typing-' + Date.now();
+  box.innerHTML += '<div id="' + typingId + '" class="chat-typing">Escribiendo...</div>';
+  box.scrollTop = box.scrollHeight;
+  history.push({ role: 'user', content: msg });
+  try {
+    const text = await callClaude({ system: systemFn(), messages: history, max_tokens: 600 });
+    history.push({ role: 'assistant', content: text });
+    const t = document.getElementById(typingId);
+    if (t) t.outerHTML = '<div class="chat-ai">' + text + '</div>';
+  } catch (e) {
+    const t = document.getElementById(typingId);
+    if (t) t.outerHTML = '<div style="color:var(--red);font-size:13px">Error: ' + e.message + '</div>';
+  }
+  box.scrollTop = box.scrollHeight;
+}
+function setupChatInputs() {
+  ['trainer-chat-input', 'nutri-chat-input'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const sendFn = id === 'trainer-chat-input' ? sendTrainerChat : sendNutriChat;
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFn(); }
+    });
+    el.addEventListener('input', function() {
+      el.style.height = '46px';
+      el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+    });
+  });
+  const fd = document.getElementById('food-desc');
+  if (fd) fd.addEventListener('input', function() {
+    document.getElementById('btn-analyze-food').disabled = !foodImageB64 && !fd.value;
+  });
+}
+
+// ════════════════════════════════════════════
+// Shopping list
+// ════════════════════════════════════════════
+function addManualShoppingItem() {
+  const input = document.getElementById('shopping-manual-input');
+  const val = input.value.trim();
+  if (!val) return;
+  val.split(',').forEach(function(v) {
+    const t = v.trim();
+    if (t && shoppingList.indexOf(t) === -1) shoppingList.push(t);
+  });
+  localStorage.setItem('fc_shopping', JSON.stringify(shoppingList));
+  input.value = '';
+  renderShoppingList();
+}
+function removeFromShoppingList(idx) {
+  shoppingList.splice(idx, 1);
+  localStorage.setItem('fc_shopping', JSON.stringify(shoppingList));
+  renderShoppingList();
+}
+function clearShoppingList() {
+  if (!confirm('¿Limpiar toda la lista?')) return;
+  shoppingList = [];
+  localStorage.setItem('fc_shopping', JSON.stringify(shoppingList));
+  renderShoppingList();
+}
+function renderShoppingList() {
+  const itemsEl = document.getElementById('shopping-list-items');
+  const footer = document.getElementById('shopping-list-footer');
+  if (!itemsEl) return;
+  if (!shoppingList.length) {
+    itemsEl.innerHTML = '<p style="font-size:13px;color:var(--txt3);text-align:center;padding:8px 0">Tu lista está vacía</p>';
+    if (footer) footer.style.display = 'none';
+    return;
+  }
+  if (footer) footer.style.display = 'block';
+  let html = '';
+  shoppingList.forEach(function(item, i) {
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)">' +
+      '<div style="display:flex;align-items:center;gap:9px">' +
+      '<span style="width:7px;height:7px;border-radius:4px;background:linear-gradient(135deg,var(--lime),var(--teal));flex-shrink:0;display:inline-block"></span>' +
+      '<span style="font-size:14px;color:#d4d4c8">' + item + '</span></div>' +
+      '<button onclick="removeFromShoppingList(' + i + ')" style="background:none;border:none;color:#3a3a50;cursor:pointer;font-size:16px;padding:3px 7px">✕</button></div>';
+  });
+  itemsEl.innerHTML = html;
+}
+
+// ════════════════════════════════════════════
+// Product analysis (Súper)
+// ════════════════════════════════════════════
+async function handleProductFile(input) {
+  const file = input.files[0]; if (!file) return;
+  try {
+    productImageB64 = await compressImage(file);
+  } catch (e) { alert('No pude procesar la imagen: ' + e.message); return; }
+  const url = URL.createObjectURL(file);
+  document.getElementById('product-upload-zone').style.display = 'none';
+  document.getElementById('product-result').innerHTML = '';
+  document.getElementById('product-preview-wrap').innerHTML =
+    '<div style="position:relative;margin-bottom:12px"><img src="' + url + '" style="width:100%;border-radius:12px;max-height:210px;object-fit:contain;background:var(--bg2)">' +
+    '<button onclick="clearProduct()" style="position:absolute;top:7px;right:7px;background:rgba(0,0,0,0.75);border:none;border-radius:20px;color:#fff;padding:5px 11px;cursor:pointer;font-size:12px">✕</button></div>';
+  document.getElementById('btn-analyze-product').style.display = 'block';
+}
+function clearProduct() {
+  productImageB64 = null;
+  document.getElementById('product-preview-wrap').innerHTML = '';
+  document.getElementById('product-upload-zone').style.display = 'block';
+  document.getElementById('product-file').value = '';
+  document.getElementById('btn-analyze-product').style.display = 'none';
+  document.getElementById('product-result').innerHTML = '';
+}
+async function analyzeProduct() {
+  if (!productImageB64) return;
+  const btn = document.getElementById('btn-analyze-product');
+  btn.disabled = true; btn.textContent = 'Analizando producto...';
+  document.getElementById('product-spinner').innerHTML = '<div class="spinner"></div>';
+  document.getElementById('product-result').innerHTML = '';
+  try {
+    const raw = await callClaude({
+      system: 'Sos un nutricionista y experto en consumo. Respondés SOLO en JSON válido sin backticks ni texto extra.',
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: productImageB64 } },
+        { type: 'text', text: 'Analizá este producto para alguien que quiere bajar de peso. Respondé SOLO con JSON:\n{"productName":"nombre","score":numero del 1 al 10,"recommendation":"COMPRAR" o "EVITAR" o "MODERACION","pros":["p1","p2"],"cons":["c1","c2"],"analysis":"2-3 oraciones","alternatives":["alt1","alt2","alt3"],"redFlags":["bandera si existe"]}' }
+      ]}],
+      max_tokens: 600
+    });
+    const r = extractJSON(raw);
+    const rec = (r.recommendation || '').toUpperCase().replace('Ó', 'O');
+    const colors = { 'COMPRAR': 'var(--lime)', 'EVITAR': 'var(--red)', 'MODERACION': 'var(--gold)' };
+    const c = colors[rec] || 'var(--lime)';
+    const recLabel = rec === 'COMPRAR' ? '✓ COMPRAR' : rec === 'EVITAR' ? '✗ EVITAR' : '⚠ MODERACIÓN';
+    const sColor = r.score >= 7 ? 'var(--lime)' : r.score >= 5 ? 'var(--gold)' : 'var(--red)';
+    let prosHtml = '', consHtml = '', altsHtml = '', flagsHtml = '';
+    (r.pros || []).forEach(function(p) { prosHtml += '<p style="font-size:12px;color:var(--txt2);margin:5px 0">✓ ' + p + '</p>'; });
+    (r.cons || []).forEach(function(x) { consHtml += '<p style="font-size:12px;color:var(--txt2);margin:5px 0">✗ ' + x + '</p>'; });
+    (r.alternatives || []).forEach(function(a, i, arr) {
+      altsHtml += '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;' + (i < arr.length - 1 ? 'border-bottom:1px solid var(--line)' : '') + '">' +
+        '<span style="width:7px;height:7px;border-radius:4px;background:linear-gradient(135deg,var(--lime),var(--teal));flex-shrink:0"></span>' +
+        '<span style="font-size:13px;color:#c4c4b8">' + a + '</span></div>';
+    });
+    if (r.redFlags && r.redFlags.length) {
+      let ff = '';
+      r.redFlags.forEach(function(f) { ff += '<p style="font-size:12px;color:#ff9d9d;margin:5px 0">' + f + '</p>'; });
+      flagsHtml = '<div class="card" style="border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.04)">' +
+        '<p style="font-size:11px;font-weight:800;color:var(--red);margin-bottom:8px">⚠ BANDERAS ROJAS</p>' + ff + '</div>';
+    }
+    document.getElementById('product-result').innerHTML =
+      '<div class="card fade">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:13px">' +
+      '<div style="flex:1"><p style="font-family:\'Space Grotesk\',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-bottom:7px">' + (r.productName || 'Producto') + '</p>' +
+      '<span style="background:rgba(255,255,255,0.04);color:' + c + ';padding:5px 13px;border-radius:20px;font-size:12px;font-weight:800;border:1px solid ' + c + '">' + recLabel + '</span></div>' +
+      '<div style="text-align:center;margin-left:12px"><p style="font-family:\'Space Grotesk\',sans-serif;font-size:38px;font-weight:700;color:' + sColor + ';line-height:1">' + (r.score || '—') + '</p><p style="font-size:10px;color:var(--txt3)">/ 10</p></div></div>' +
+      '<p style="font-size:13px;color:var(--txt2);line-height:1.65">' + (r.analysis || '') + '</p></div>' +
+      '<div class="grid2"><div class="card"><p style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:8px;letter-spacing:0.6px">PROS</p>' + prosHtml + '</div>' +
+      '<div class="card"><p style="font-size:11px;font-weight:800;color:#ff8d7a;margin-bottom:8px;letter-spacing:0.6px">CONTRAS</p>' + consHtml + '</div></div>' +
+      flagsHtml +
+      '<div class="card"><p class="card-title">Alternativas saludables</p>' + altsHtml + '</div>';
+  } catch (e) {
+    document.getElementById('product-result').innerHTML =
+      '<div class="card"><p style="color:var(--red);font-size:13px;line-height:1.6">Error al analizar: ' + (e.message || '').slice(0, 160) + '</p>' +
+      '<p style="font-size:12px;color:var(--txt3);margin-top:8px">Probá con una foto más cercana de la etiqueta o info nutricional.</p></div>';
+  }
+  document.getElementById('product-spinner').innerHTML = '';
+  btn.disabled = false; btn.textContent = 'Analizar producto ↗';
+}
+</script>
+</body>
+</html>
